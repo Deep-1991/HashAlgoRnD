@@ -3,6 +3,7 @@
  */
 package org.zlounge.beat.encryption.algos;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -35,12 +36,16 @@ public class RSAEncryption implements Algorithm {
 	@Override
 	public String encrypt(String string) {
 		try {
+			File publicKey = new File(Constants.PUBLIC_KEY);
+			if(!publicKey.exists()){
+				RSAKeyCreator.generateKeys();
+				System.out.println("Keys generated!!");
+			}
 			Cipher cipher = Cipher.getInstance("RSA");
 
 			PublicKey key = getPublicKey();
 			cipher.init(Cipher.ENCRYPT_MODE, key);
 			byte[] encrypted = cipher.doFinal(string.getBytes());
-			System.out.println("Encrypted string length = " + encrypted.toString().length());
 			return Base64.getEncoder().encodeToString(encrypted);
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
@@ -78,6 +83,11 @@ public class RSAEncryption implements Algorithm {
 	@Override
 	public String decrypt(String string) {
 		try {
+			File privateKey = new File(Constants.PRIVATE_KEY);
+			if(!privateKey.exists()){
+				System.out.println("Private Key not present!!");
+				return null;
+			}
 			Cipher cipher = Cipher.getInstance("RSA");
 
 			PrivateKey key = getPrivateKey();

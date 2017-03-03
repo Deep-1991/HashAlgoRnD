@@ -4,6 +4,7 @@
 package org.zlounge.beat.encryption.common;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -19,9 +20,9 @@ public class Utils {
 	 * 
 	 * @param content
 	 */
-	public static void writeToFile(String fileName, String content){
+	public static void writeToFile(File file, Object content){
 		try {
-			PrintWriter out = new PrintWriter(fileName);
+			PrintWriter out = new PrintWriter(file);
 			out.println(content);
 			out.close();
 		} catch (FileNotFoundException e) {

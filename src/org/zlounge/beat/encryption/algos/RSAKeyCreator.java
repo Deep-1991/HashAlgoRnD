@@ -12,11 +12,6 @@ import org.zlounge.beat.encryption.common.Constants;
 
 public class RSAKeyCreator {
 	
-	public static void main(String[] args) {
-		generateKeys();
-		System.out.println("Keys generated!!");
-	}
-
 	public static void generateKeys() {
 		try {
 			final KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
@@ -37,12 +32,10 @@ public class RSAKeyCreator {
 			}
 			publicKeyFile.createNewFile();
 
-			// Saving the Public key in a file
 			ObjectOutputStream publicKeyOS = new ObjectOutputStream(new FileOutputStream(publicKeyFile));
 			publicKeyOS.writeObject(key.getPublic());
 			publicKeyOS.close();
 
-			// Saving the Private key in a file
 			ObjectOutputStream privateKeyOS = new ObjectOutputStream(new FileOutputStream(privateKeyFile));
 			privateKeyOS.writeObject(key.getPrivate());
 			privateKeyOS.close();

@@ -8,21 +8,21 @@ import javax.crypto.spec.SecretKeySpec;
 public class AESEncryption implements Algorithm {
 	
 	private static String KEY = "12345678abcdefgh";
-    private static String INIT_VECTOR = "abcdefgh12345678";
 
 	@Override
 	public String encrypt(String string) {
-		return encrypt(KEY, INIT_VECTOR, string);
+		//simple demo key used.
+		return encrypt(KEY, string);
 	}
 
 	@Override
 	public String decrypt(String string) {
-		return decrypt(KEY, INIT_VECTOR, string);
+		return decrypt(KEY, string);
 	}
 	
-	public String encrypt(String key, String initVector, String value) {
+	public String encrypt(String key, String value) {
         try {
-            SecretKeySpec skeySpec = new SecretKeySpec(key.getBytes(), "AES");
+            SecretKeySpec skeySpec = new SecretKeySpec(key.getBytes("UTF-8"), "AES");
 
             Cipher cipher = Cipher.getInstance("AES");
             cipher.init(Cipher.ENCRYPT_MODE, skeySpec);
@@ -35,9 +35,9 @@ public class AESEncryption implements Algorithm {
         return null;
     }
 
-	public String decrypt(String key, String initVector, String encrypted) {
+	public String decrypt(String key, String encrypted) {
         try {
-            SecretKeySpec skeySpec = new SecretKeySpec(key.getBytes(), "AES");
+            SecretKeySpec skeySpec = new SecretKeySpec(key.getBytes("UTF-8"), "AES");
 
             Cipher cipher = Cipher.getInstance("AES");
             cipher.init(Cipher.DECRYPT_MODE, skeySpec);

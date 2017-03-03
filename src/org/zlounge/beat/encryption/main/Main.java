@@ -15,11 +15,11 @@ public class Main {
 		System.out.println("-------");
 		
 		AlgoFetcher fetcher = new AlgoFetcher();
-		Algorithm algorithm = fetcher.getAlgorithm("AES");
+		Algorithm algorithm = fetcher.getAlgorithm("RSA");
         String encryptedString = algorithm.encrypt(string);
         
         System.out.println("Encrypted string = "+encryptedString);
-        System.out.println("Decrypted compressed length = "+algorithm.decrypt(encryptedString));
+        System.out.println("Decrypted string = "+algorithm.decrypt(encryptedString));
 
         System.out.println("Encrypted and encoded string length = "+encryptedString.length());
 //		System.out.println("decrypted length = "+decrypt(key, initVector, encryptedString).length());
