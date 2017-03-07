@@ -25,7 +25,7 @@ import org.zlounge.beat.encryption.common.Constants;
  * @author drastogi
  *
  */
-public class RSAEncryption implements Algorithm {
+public class RSAEncryption implements AlgorithmInterface {
 	
 	/*
 	 * (non-Javadoc)
@@ -34,7 +34,7 @@ public class RSAEncryption implements Algorithm {
 	 * org.zlounge.beat.encryption.algos.Algorithm#encrypt(java.lang.String)
 	 */
 	@Override
-	public String encrypt(String string) {
+	public String encrypt(Object object, String string) {
 		try {
 			File publicKey = new File(Constants.PUBLIC_KEY);
 			if(!publicKey.exists()){
@@ -81,7 +81,7 @@ public class RSAEncryption implements Algorithm {
 	 * org.zlounge.beat.encryption.algos.Algorithm#decrypt(java.lang.String)
 	 */
 	@Override
-	public String decrypt(String string) {
+	public String decrypt(Object object, String string) {
 		try {
 			File privateKey = new File(Constants.PRIVATE_KEY);
 			if(!privateKey.exists()){

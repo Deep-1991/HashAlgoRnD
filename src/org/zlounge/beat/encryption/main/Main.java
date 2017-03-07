@@ -1,42 +1,58 @@
 package org.zlounge.beat.encryption.main;
 
-import java.io.IOException;
+import java.security.interfaces.RSAPrivateKey;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
+import org.json.JSONObject;
 import org.zlounge.beat.encryption.algos.AlgoFetcher;
-import org.zlounge.beat.encryption.algos.Algorithm;
-import org.zlounge.beat.encryption.common.Utils;
+import org.zlounge.beat.encryption.algos.AlgorithmInterface;
+import org.zlounge.beat.encryption.algos.JWTEncryption;
 
 public class Main {
 	
+	private static String KEY = "12345678abcdefgh";
+	
 	public static void main(String[] args){
 		
-		String string = "{\"customer_number\":\"123456789012345678\", \"time\":1488386073}";
-		System.out.println("original length = "+string.length());
-		System.out.println("-------");
+//		String string = "{\"customer_number\":\"123456789012345678\", \"time\":1488386073}";
+		long base_cusotmerNo = 123456789012345678l;
 		
 		AlgoFetcher fetcher = new AlgoFetcher();
-		Algorithm algorithm = fetcher.getAlgorithm("RSA");
-        String encryptedString = algorithm.encrypt(string);
-        
-        System.out.println("Encrypted string = "+encryptedString);
-        System.out.println("Decrypted string = "+algorithm.decrypt(encryptedString));
-
-        System.out.println("Encrypted and encoded string length = "+encryptedString.length());
-//		System.out.println("decrypted length = "+decrypt(key, initVector, encryptedString).length());
+		AlgorithmInterface algorithm = fetcher.getAlgorithm("JWT");
+		RSAPrivateKey key = ((JWTEncryption)algorithm).getRSAPrivateKey();
+		long startTime = System.currentTimeMillis();
 		
-		/*String compressedString = "";
+		Runtime runtime = Runtime.getRuntime();
+		int availableProcessors = runtime.availableProcessors()+1;
+		
+		ExecutorService service = Executors.newFixedThreadPool(availableProcessors);
+		for (int i = 0; i < 10000000; i++) {
+			long custNumber = base_cusotmerNo+i;
+			
+			service.execute(new Runnable() {
+				@Override
+				public void run() {
+					JSONObject jsonObject = new JSONObject();
+					jsonObject.put("customer_number", custNumber);
+					jsonObject.put("time", System.currentTimeMillis());
+					String encryptedString = algorithm.encrypt(key, jsonObject.toString());
+//			        System.out.println("Encrypted string = "+encryptedString);
+				}
+			});
+		}
+		
+		service.shutdown();
 		try {
-			compressedString = Utils.compressString(string);
-		} catch (IOException e) {
+			service.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		System.out.println("-----------");
-		System.out.println("Compressed string length = "+compressedString.length());
+		long endTime = System.currentTimeMillis();
+		System.out.println("Time taken = "+ (endTime-startTime));
 		
-		String encryptedCompressedString = algorithm.encrypt(compressedString);
-		System.out.println("Encrypted, encoded and compressed string length = "+encryptedCompressedString.length());*/
-		
-//		FileWriter.writeToFile("algoDemo.txt", encryptedCompressedString);
+//		FileWriter.writeToFile("algoDemo.txt", encryptedString);
 	}
 
 }

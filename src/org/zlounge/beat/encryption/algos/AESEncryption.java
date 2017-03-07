@@ -1,28 +1,17 @@
 package org.zlounge.beat.encryption.algos;
 
+import java.security.Key;
 import java.util.Base64;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
-public class AESEncryption implements Algorithm {
+public class AESEncryption implements AlgorithmInterface {
 	
-	private static String KEY = "12345678abcdefgh";
-
 	@Override
-	public String encrypt(String string) {
-		//simple demo key used.
-		return encrypt(KEY, string);
-	}
-
-	@Override
-	public String decrypt(String string) {
-		return decrypt(KEY, string);
-	}
-	
-	public String encrypt(String key, String value) {
+	public String encrypt(Object key, String value) {
         try {
-            SecretKeySpec skeySpec = new SecretKeySpec(key.getBytes("UTF-8"), "AES");
+            SecretKeySpec skeySpec = new SecretKeySpec(key.toString().getBytes("UTF-8"), "AES");
 
             Cipher cipher = Cipher.getInstance("AES");
             cipher.init(Cipher.ENCRYPT_MODE, skeySpec);
@@ -34,10 +23,10 @@ public class AESEncryption implements Algorithm {
         }
         return null;
     }
-
-	public String decrypt(String key, String encrypted) {
+	@Override
+	public String decrypt(Object key, String encrypted) {
         try {
-            SecretKeySpec skeySpec = new SecretKeySpec(key.getBytes("UTF-8"), "AES");
+            Key skeySpec = new SecretKeySpec(key.toString().getBytes("UTF-8"), "AES");
 
             Cipher cipher = Cipher.getInstance("AES");
             cipher.init(Cipher.DECRYPT_MODE, skeySpec);
